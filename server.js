@@ -4,7 +4,7 @@ const rateLimit = require('express-rate-limit');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const app = express();
-app.set('trust proxy', 1); // FIXED: Required for Vercel rate limiting to work
+app.set('trust proxy', 1); 
 app.use(express.json());
 app.use(express.static('.')); 
 
@@ -26,7 +26,8 @@ app.post('/api/draft', apiLimiter, async (req, res) => {
     const result = await model.generateContent(prompt);
     res.json({ draft: result.response.text() });
   } catch (error) {
-    res.status(500).json({ error: 'Server load is high. Please try again.' });
+    // CHANGED: This will now send the exact technical error to your dashboard
+    res.status(500).json({ error: `API Error: ${error.message}` });
   }
 });
 
