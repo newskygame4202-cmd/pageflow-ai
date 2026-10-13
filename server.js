@@ -19,14 +19,14 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 app.post('/api/draft', apiLimiter, async (req, res) => {
   try {
     const { notes } = req.body;
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    // Changed to gemini-pro, which is universally supported across all SDK versions
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     
     const prompt = `You are a professional book editor. Turn these messy notes into a well-structured, cohesive book chapter paragraph. Maintain a professional tone. Notes: ${notes}`;
     
     const result = await model.generateContent(prompt);
     res.json({ draft: result.response.text() });
   } catch (error) {
-    // CHANGED: This will now send the exact technical error to your dashboard
     res.status(500).json({ error: `API Error: ${error.message}` });
   }
 });
