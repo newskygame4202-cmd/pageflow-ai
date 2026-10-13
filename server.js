@@ -4,19 +4,18 @@ const rateLimit = require('express-rate-limit');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const app = express();
+app.set('trust proxy', 1); // FIXED: Required for Vercel rate limiting to work
 app.use(express.json());
 app.use(express.static('.')); 
 
-// Security: Block users who spam the server or stay too long
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes window
-  max: 10, // Limit each IP to 10 requests per window
-  message: { error: 'Session expired or too many requests. Please take a break and try again later.' }
+  windowMs: 15 * 60 * 1000, 
+  max: 10, 
+  message: { error: 'Session expired or too many requests.' }
 });
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Apply the security limit only to the AI endpoint
 app.post('/api/draft', apiLimiter, async (req, res) => {
   try {
     const { notes } = req.body;
