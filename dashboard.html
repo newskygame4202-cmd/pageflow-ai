@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workspace | PageFlow AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { brand: { navy: '#1a2238', blue: '#4a72d4', light: '#f8fafc' } } } }
+    }
+  </script>
+</head>
+<body class="bg-brand-light flex h-screen overflow-hidden font-sans text-slate-800">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-brand-navy text-slate-300 flex flex-col">
+    <div class="p-6 border-b border-slate-700">
+      <img src="logo.png" alt="Logo" class="h-10 object-contain bg-white rounded px-2">
+    </div>
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+      <a href="#" class="block px-4 py-2 bg-slate-800 text-white rounded-md font-medium">📝 Current Draft</a>
+      <a href="#" class="block px-4 py-2 hover:bg-slate-800 rounded-md transition">📁 My Manuscripts</a>
+      <a href="#" class="block px-4 py-2 hover:bg-slate-800 rounded-md transition">⚙️ Settings</a>
+    </nav>
+    <div class="p-4 border-t border-slate-700 text-sm">
+      <a href="index.html" class="flex items-center text-slate-400 hover:text-white transition">
+        ← Log Out
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 flex flex-col h-full bg-white">
+    
+    <!-- Topbar -->
+    <header class="h-16 border-b border-slate-200 flex items-center justify-between px-8 bg-white">
+      <h1 class="text-xl font-bold text-brand-navy">Untitled Manuscript - Chapter 1</h1>
+      <button onclick="generateDraft()" id="generate-btn" class="bg-brand-blue text-white px-6 py-2 rounded font-semibold hover:bg-blue-600 transition shadow-sm">
+        ✨ Generate Chapter
+      </button>
+    </header>
+
+    <!-- Split Editor Area -->
+    <div class="flex-1 flex overflow-hidden">
+      
+      <!-- Input Area -->
+      <div class="w-1/2 border-r border-slate-200 flex flex-col bg-slate-50">
+        <div class="p-4 border-b border-slate-200 bg-slate-100 flex justify-between items-center">
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Raw Notes & Research</span>
+          <span class="text-xs text-slate-400" id="word-count">0 words</span>
+        </div>
+        <textarea id="raw-notes" class="flex-1 w-full p-6 bg-transparent resize-none focus:outline-none focus:ring-inset focus:ring-2 focus:ring-brand-blue text-slate-700 leading-relaxed" placeholder="Dump your scattered thoughts, bullet points, or raw research here..."></textarea>
+      </div>
+
+      <!-- AI Output Area -->
+      <div class="w-1/2 flex flex-col bg-white">
+        <div class="p-4 border-b border-slate-200 bg-slate-100 flex justify-between items-center">
+          <span class="text-xs font-bold text-brand-blue uppercase tracking-wider">Formatted Output</span>
+          <button class="text-xs text-slate-500 hover:text-brand-navy font-semibold">Copy Text</button>
+        </div>
+        <div id="ai-output" class="flex-1 w-full p-6 overflow-y-auto text-slate-800 font-serif leading-loose text-lg whitespace-pre-wrap">
+          <span class="text-slate-400 font-sans text-base">Your structured, publish-ready text will appear here. Hit "Generate Chapter" when you're ready.</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Word counter logic
+    document.getElementById('raw-notes').addEventListener('input', function() {
+      const words = this.value.trim().split(/\s+/).filter(word => word.length > 0).length;
+      document.getElementById('word-count').innerText = `${words} words`;
+    });
+
+    async function generateDraft() {
+      const btn = document.getElementById('generate-btn');
+      const output = document.getElementById('ai-output');
+      const notes = document.getElementById('raw-notes').value;
+
+      if(!notes) return alert('Please enter some raw notes first!');
+
+      btn.innerText = 'Drafting...';
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'cursor-wait');
+      output.innerHTML = '<span class="animate-pulse text-brand-blue font-sans text-base">PageFlow AI is structuring your chapter...</span>';
+
+      try {
+        const response = await fetch('/api/draft', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ notes })
+        });
+        const data = await response.json();
+        
+        if(data.error) {
+          output.innerHTML = `<span class="text-red-500 font-sans text-base">${data.error}</span>`;
+        } else {
+          output.innerText = data.draft;
+        }
+      } catch(err) {
+        output.innerHTML = '<span class="text-red-500 font-sans text-base">Failed to connect to AI server.</span>';
+      }
+
+      btn.innerText = '✨ Generate Chapter';
+      btn.disabled = false;
+      btn.classList.remove('opacity-50', 'cursor-wait');
+    }
+  </script>
+</body>
+</html>
