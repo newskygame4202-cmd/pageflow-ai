@@ -13,7 +13,6 @@
             brand: {
               navy: '#1a2238',
               blue: '#4a72d4',
-              purple: '#8a6fd6',
               light: '#f8fafc'
             }
           }
@@ -26,22 +25,31 @@
       const title = document.getElementById('auth-title');
       const submitBtn = document.getElementById('auth-submit');
       const toggleText = document.getElementById('auth-toggle-text');
+      const termsContainer = document.getElementById('terms-container');
+      const termsCheckbox = document.getElementById('terms');
       
       if (mode === 'signup') {
         title.innerText = 'Create your account';
         submitBtn.innerText = 'Sign Up';
         toggleText.innerHTML = 'Already have an account? <button type="button" onclick="toggleAuthMode(\'signin\')" class="text-brand-blue font-semibold hover:underline">Log in</button>';
+        
+        // Show and require terms for Sign Up
+        termsContainer.style.display = 'flex';
+        termsCheckbox.required = true;
       } else {
         title.innerText = 'Welcome back';
         submitBtn.innerText = 'Sign In';
         toggleText.innerHTML = 'Don\'t have an account? <button type="button" onclick="toggleAuthMode(\'signup\')" class="text-brand-blue font-semibold hover:underline">Sign up</button>';
+        
+        // Hide and remove requirement for terms on Sign In
+        termsContainer.style.display = 'none';
+        termsCheckbox.required = false;
       }
     }
   </script>
 </head>
 <body class="bg-brand-light flex items-center justify-center min-h-screen p-6 font-sans antialiased">
   
-  <!-- Back to Home button -->
   <a href="index.html" class="absolute top-6 left-6 text-slate-500 hover:text-brand-navy font-semibold transition">
     ← Back to Home
   </a>
@@ -49,12 +57,12 @@
   <div class="bg-white p-8 sm:p-10 rounded-xl shadow-xl max-w-md w-full border border-slate-200">
     <div class="text-center mb-8">
       <a href="index.html">
-        <img src="logo.png" alt="PageFlow AI Logo" class="h-20 mx-auto mb-4 object-contain scale-110">
+        <svg class="w-12 h-12 text-brand-blue mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
       </a>
       <h2 id="auth-title" class="text-2xl font-bold text-brand-navy">Create your account</h2>
     </div>
     
-   <form action="dashboard.html">
+    <form action="dashboard.html">
       <div class="mb-4">
         <label class="block text-sm font-semibold text-slate-600 mb-2">Email Address</label>
         <input type="email" placeholder="author@yourdomain.com" required class="w-full px-4 py-3 rounded-md border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:outline-none">
@@ -64,8 +72,8 @@
         <input type="password" placeholder="••••••••" required class="w-full px-4 py-3 rounded-md border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:outline-none">
       </div>
       
-      <!-- Legal Requirement Checkbox -->
-      <div class="mb-6 flex items-start">
+      <!-- Legal Requirement Checkbox (Hidden on Sign In) -->
+      <div id="terms-container" class="mb-6 flex items-start">
         <input type="checkbox" required id="terms" class="mt-1 mr-3 h-4 w-4 text-brand-blue focus:ring-brand-blue border-gray-300 rounded cursor-pointer">
         <label for="terms" class="text-sm text-slate-600">
           I agree to the <a href="legal.html" class="text-brand-blue hover:underline">Terms of Service</a> and <a href="legal.html" class="text-brand-blue hover:underline">Privacy Policy</a>.
