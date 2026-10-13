@@ -15,21 +15,32 @@ const apiLimiter = rateLimit({
 
 app.post('/api/draft', apiLimiter, async (req, res) => {
   try {
+    const { notes } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
     
-    // Calling ModelService.ListModels as requested by the error
-    const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+    // Using the exact model name found in your API key's allowed list
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
     
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text: `You are a professional book editor. Turn these messy notes into a well-structured, cohesive book chapter paragraph. Maintain a professional tone. Notes: ${notes}`
+          }]
+        }]
+      })
+    });
+
     const data = await response.json();
     
     if (!response.ok) {
-      throw new Error(data.error?.message || 'Failed to fetch models');
+      throw new Error(data.error?.message || 'API request failed');
     }
 
-    // Format the list of available models and send it to the dashboard
-    const modelNames = data.models.map(m => m.name).join('\n');
-    res.json({ draft: `AVAILABLE MODELS FOR YOUR API KEY:\n\n${modelNames}` });
+    const draft = data.candidates[0].content.parts[0].text;
+    res.json({ draft: draft });
     
   } catch (error) {
     res.status(500).json({ error: `API Error: ${error.message}` });
