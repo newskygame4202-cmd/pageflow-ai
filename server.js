@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const rateLimit = require('express-rate-limit');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const app = express();
 app.set('trust proxy', 1); 
@@ -14,17 +13,35 @@ const apiLimiter = rateLimit({
   message: { error: 'Session expired or too many requests.' }
 });
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
 app.post('/api/draft', apiLimiter, async (req, res) => {
   try {
     const { notes } = req.body;
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const apiKey = process.env.GEMINI_API_KEY;
     
-    const prompt = `You are a professional book editor. Turn these messy notes into a well-structured, cohesive book chapter paragraph. Maintain a professional tone. Notes: ${notes}`;
+    // Direct raw API call bypassing the SDK entirely
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
     
-    const result = await model.generateContent(prompt);
-    res.json({ draft: result.response.text() });
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text: `You are a professional book editor. Turn these messy notes into a well-structured, cohesive book chapter paragraph. Maintain a professional tone. Notes: ${notes}`
+          }]
+        }]
+      })
+    });
+
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.error?.message || 'API request failed');
+    }
+
+    const draft = data.candidates[0].content.parts[0].text;
+    res.json({ draft: draft });
+    
   } catch (error) {
     res.status(500).json({ error: `API Error: ${error.message}` });
   }
