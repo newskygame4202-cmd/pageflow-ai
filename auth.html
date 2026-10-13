@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In & Sign Up | PageFlow AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#1a2238',
+              blue: '#4a72d4',
+              purple: '#8a6fd6',
+              light: '#f8fafc'
+            }
+          }
+        }
+      }
+    }
+
+    // Toggle between Sign In and Sign Up views
+    function toggleAuthMode(mode) {
+      const title = document.getElementById('auth-title');
+      const submitBtn = document.getElementById('auth-submit');
+      const toggleText = document.getElementById('auth-toggle-text');
+      
+      if (mode === 'signup') {
+        title.innerText = 'Create your account';
+        submitBtn.innerText = 'Sign Up';
+        toggleText.innerHTML = 'Already have an account? <button type="button" onclick="toggleAuthMode(\'signin\')" class="text-brand-blue font-semibold hover:underline">Log in</button>';
+      } else {
+        title.innerText = 'Welcome back';
+        submitBtn.innerText = 'Sign In';
+        toggleText.innerHTML = 'Don\'t have an account? <button type="button" onclick="toggleAuthMode(\'signup\')" class="text-brand-blue font-semibold hover:underline">Sign up</button>';
+      }
+    }
+  </script>
+</head>
+<body class="bg-brand-light flex items-center justify-center min-h-screen p-6 font-sans antialiased">
+  
+  <!-- Back to Home button -->
+  <a href="index.html" class="absolute top-6 left-6 text-slate-500 hover:text-brand-navy font-semibold transition">
+    ← Back to Home
+  </a>
+
+  <div class="bg-white p-8 sm:p-10 rounded-xl shadow-xl max-w-md w-full border border-slate-200">
+    <div class="text-center mb-8">
+      <a href="index.html">
+        <img src="logo.png" alt="PageFlow AI Logo" class="h-20 mx-auto mb-4 object-contain scale-110">
+      </a>
+      <h2 id="auth-title" class="text-2xl font-bold text-brand-navy">Create your account</h2>
+    </div>
+    
+    <form onsubmit="event.preventDefault(); alert('Account creation is invite-only during beta. Please join the waitlist on the home page!'); window.location.href='index.html';">
+      <div class="mb-4">
+        <label class="block text-sm font-semibold text-slate-600 mb-2">Email Address</label>
+        <input type="email" placeholder="author@yourdomain.com" required class="w-full px-4 py-3 rounded-md border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:outline-none">
+      </div>
+      <div class="mb-6">
+        <label class="block text-sm font-semibold text-slate-600 mb-2">Password</label>
+        <input type="password" placeholder="••••••••" required class="w-full px-4 py-3 rounded-md border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:outline-none">
+      </div>
+      
+      <!-- Legal Requirement Checkbox -->
+      <div class="mb-6 flex items-start">
+        <input type="checkbox" required id="terms" class="mt-1 mr-3 h-4 w-4 text-brand-blue focus:ring-brand-blue border-gray-300 rounded cursor-pointer">
+        <label for="terms" class="text-sm text-slate-600">
+          I agree to the <a href="legal.html" class="text-brand-blue hover:underline">Terms of Service</a> and <a href="legal.html" class="text-brand-blue hover:underline">Privacy Policy</a>.
+        </label>
+      </div>
+
+      <button id="auth-submit" type="submit" class="w-full bg-brand-navy text-white py-3 rounded-md font-semibold hover:bg-slate-800 transition shadow-md">
+        Sign Up
+      </button>
+    </form>
+    
+    <p id="auth-toggle-text" class="mt-6 text-center text-sm text-slate-500">
+      Already have an account? <button type="button" onclick="toggleAuthMode('signin')" class="text-brand-blue font-semibold hover:underline">Log in</button>
+    </p>
+  </div>
+  
+</body>
+</html>

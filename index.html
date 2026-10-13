@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PageFlow AI | Turn Fragmented Research Into Print-Ready Chapters</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#1a2238',
+              blue: '#4a72d4',
+              purple: '#8a6fd6',
+              light: '#f8fafc'
+            }
+          }
+        }
+      }
+    }
+
+    // Realistic form submission simulation
+    function handleWaitlist(event) {
+      event.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      const originalText = btn.innerText;
+      btn.innerText = 'Submitting...';
+      btn.disabled = true;
+      btn.classList.add('opacity-75', 'cursor-wait');
+      
+      setTimeout(() => {
+        alert('Welcome to PageFlow AI! Check your inbox for the developer beta link.');
+        btn.innerText = originalText;
+        btn.disabled = false;
+        btn.classList.remove('opacity-75', 'cursor-wait');
+        event.target.reset();
+      }, 1200);
+    }
+  </script>
+</head>
+<body class="bg-brand-light text-slate-800 font-sans antialiased flex flex-col min-h-screen">
+  
+  <!-- Navbar -->
+  <nav class="container mx-auto px-6 py-4 flex justify-between items-center border-b border-slate-200">
+    <div class="flex items-center">
+      <img src="logo.png" alt="PageFlow AI Logo" class="h-24 md:h-32 w-auto object-contain scale-125 origin-left">
+    </div>
+    <div class="flex items-center gap-6">
+      <a href="auth.html" class="hidden md:block text-sm font-semibold text-slate-600 hover:text-brand-navy transition">Login to Dashboard</a>
+      <a href="#cta" class="bg-brand-navy text-white px-5 py-2 rounded-md font-medium hover:bg-slate-800 transition shadow-sm">
+        Start Free
+      </a>
+    </div>
+  </nav>
+
+  <!-- 1. Above the Fold (Hero Section) -->
+  <header class="container mx-auto px-6 py-20 lg:py-24 grid lg:grid-cols-2 gap-12 items-center">
+    <div>
+      <h1 class="text-4xl lg:text-6xl font-extrabold tracking-tight text-brand-navy leading-tight mb-6">
+        Turn Fragmented Research Into Print-Ready Chapters.
+      </h1>
+      <p class="text-lg lg:text-xl text-slate-600 mb-8 leading-relaxed">
+        PageFlow AI scales your writing process. Maintain narrative tone, accurate formatting, and cohesive structure across entire manuscripts using a 200k context engine.
+      </p>
+      <a href="#cta" class="inline-block bg-brand-blue text-white px-8 py-4 rounded-md text-lg font-semibold hover:bg-blue-700 transition shadow-lg">
+        Start Your First Chapter Free
+      </a>
+    </div>
+    
+    <!-- Working App Demo -->
+    <div class="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col h-[400px] lg:h-[500px]">
+      <div class="p-4 bg-slate-50 border-b border-slate-200 flex-1">
+        <textarea id="raw-notes" class="w-full h-full p-3 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-brand-blue resize-none" placeholder="Paste your messy notes or ideas here..."></textarea>
+      </div>
+      <div class="p-4 bg-white flex-1 overflow-y-auto">
+        <h3 class="text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">AI Generated Draft</h3>
+        <div id="ai-output" class="text-slate-700 font-serif leading-relaxed text-sm whitespace-pre-wrap">Your formatted chapter will appear here...</div>
+      </div>
+      <div class="p-4 bg-slate-100 border-t border-slate-200">
+        <button onclick="generateDraft()" id="generate-btn" class="w-full bg-brand-navy text-white px-4 py-3 rounded font-semibold hover:bg-slate-800 transition shadow">Turn Notes into Chapter</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. The Direct Benefit Grid -->
+  <section class="bg-white py-20 border-y border-slate-200">
+    <div class="container mx-auto px-6">
+      <div class="grid md:grid-cols-3 gap-12">
+        <div>
+          <div class="w-12 h-12 bg-brand-light rounded-lg flex items-center justify-center mb-6 text-brand-blue">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-brand-navy mb-3">Deep Context Intake</h3>
+          <p class="text-slate-600">Upload up to 150,000 words of raw notes, transcriptions, and character sheets without losing details.</p>
+        </div>
+        <div>
+          <div class="w-12 h-12 bg-brand-light rounded-lg flex items-center justify-center mb-6 text-brand-purple">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-brand-navy mb-3">Tone & Narrative Continuity</h3>
+          <p class="text-slate-600">AI that remembers your specific writing style, pacing, and vocabulary from chapter one to the final page.</p>
+        </div>
+        <div>
+          <div class="w-12 h-12 bg-brand-light rounded-lg flex items-center justify-center mb-6 text-brand-navy">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-brand-navy mb-3">Publisher-Ready Formatting</h3>
+          <p class="text-slate-600">Automatically generate clean Markdown, PDF layouts, or organized educational workbooks ready for export.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. How It Works -->
+  <section class="container mx-auto px-6 py-24 flex-grow">
+    <h2 class="text-3xl font-bold text-center text-brand-navy mb-16">How It Works</h2>
+    <div class="grid md:grid-cols-3 gap-8 text-center">
+      <div class="relative">
+        <div class="w-16 h-16 bg-brand-navy text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6 shadow-md">1</div>
+        <h3 class="text-lg font-bold text-brand-navy mb-2">Dump Your Notes</h3>
+        <p class="text-slate-600">Drag and drop scattered voice notes, PDFs, web research, or character profiles.</p>
+      </div>
+      <div class="relative">
+        <div class="w-16 h-16 bg-brand-blue text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6 shadow-md">2</div>
+        <h3 class="text-lg font-bold text-brand-navy mb-2">Map Your Structure</h3>
+        <p class="text-slate-600">Review an automatically generated interactive outline to tweak the flow, chapters, and exercises.</p>
+      </div>
+      <div class="relative">
+        <div class="w-16 h-16 bg-brand-purple text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6 shadow-md">3</div>
+        <h3 class="text-lg font-bold text-brand-navy mb-2">Generate Your Manuscript</h3>
+        <p class="text-slate-600">Watch PageFlow draft long-form, cohesive chapters that respect your structural constraints.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Bottom Call to Action -->
+  <section id="cta" class="bg-brand-navy text-white py-24 text-center mt-auto">
+    <div class="container mx-auto px-6 max-w-3xl">
+      <h2 class="text-4xl font-bold mb-6">Stop staring at a blank page.</h2>
+      <p class="text-xl text-slate-300 mb-10">Join the beta and start building your manuscript today.</p>
+      <form class="flex flex-col sm:flex-row gap-3 justify-center" onsubmit="handleWaitlist(event)">
+        <input type="email" placeholder="author@yourdomain.com" required class="px-5 py-4 rounded-md border border-slate-600 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-brand-blue w-full sm:w-96 text-lg placeholder-slate-400">
+        <button id="submit-btn" type="submit" class="bg-brand-blue text-white px-8 py-4 rounded-md font-semibold text-lg hover:bg-blue-600 transition shadow-lg">
+          Draft Your Book Now
+        </button>
+      </form>
+      <p class="mt-6 text-sm text-slate-400 flex items-center justify-center gap-2">
+        <svg class="w-4 h-4 text-brand-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        Your data is strictly confidential. No AI training on private manuscripts.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-8 text-center text-slate-500">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p>&copy; 2026 PageFlow AI. All rights reserved.</p>
+      <div class="flex gap-6 text-sm">
+        <a href="legal.html" class="hover:text-brand-navy">Privacy Policy</a>
+        <a href="legal.html" class="hover:text-brand-navy">Terms of Service</a>
+        <a href="mailto:contact@yourdomain.com" class="hover:text-brand-navy">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    async function generateDraft() {
+      const btn = document.getElementById('generate-btn');
+      const output = document.getElementById('ai-output');
+      const notes = document.getElementById('raw-notes').value;
+
+      if(!notes) return alert('Please enter some notes first!');
+
+      btn.innerText = 'Drafting with AI...';
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+      output.innerHTML = '<span class="animate-pulse text-brand-blue font-sans">PageFlow AI is writing...</span>';
+
+      try {
+        const response = await fetch('/api/draft', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ notes })
+        });
+        const data = await response.json();
+        output.innerText = data.draft || 'Error generating text.';
+      } catch(err) {
+        output.innerText = 'Failed to connect to server.';
+      }
+
+      btn.innerText = 'Turn Notes into Chapter';
+      btn.disabled = false;
+      btn.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
+  </script>
+
+
+<!-- Cookie Consent Banner -->
+  <div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-slate-900 text-slate-300 py-4 px-6 shadow-2xl flex flex-col sm:flex-row justify-between items-center z-50 transform transition-transform duration-500 translate-y-full">
+    <p class="text-sm mb-4 sm:mb-0">
+      We use essential cookies to manage secure sessions and prevent server overload. No tracking or ads. 
+      <a href="legal.html" class="text-brand-blue hover:underline font-semibold">Read our Cookie Policy</a>.
+    </p>
+    <button onclick="acceptCookies()" class="bg-brand-blue text-white px-6 py-2 rounded font-semibold hover:bg-blue-600 transition whitespace-nowrap">
+      Got it
+    </button>
+  </div>
+
+  <script>
+    // Cookie Banner Logic
+    document.addEventListener("DOMContentLoaded", () => {
+      if (!localStorage.getItem("cookiesAccepted")) {
+        setTimeout(() => {
+          document.getElementById("cookie-banner").classList.remove("translate-y-full");
+        }, 1000); // Slide up after 1 second
+      }
+    });
+
+    function acceptCookies() {
+      localStorage.setItem("cookiesAccepted", "true");
+      document.getElementById("cookie-banner").classList.add("translate-y-full");
+    }
+  </script>
+  
+</body>
+</html>
